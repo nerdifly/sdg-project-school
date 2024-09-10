@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG 7 Bordspel</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #dff9fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .board-container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #130f40;
+        }
+
+        .board {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            color: white;
+            margin: 0 20px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.6s ease-in-out;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .start {
+            background-color: #6ab04c;
+            box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
+            animation: bounce 1s ease infinite;
+        }
+
+        .problem {
+            background-color: #eb4d4b;
+            box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+        }
+
+        .energy {
+            background-color: #f9ca24;
+            box-shadow: 0 0 20px rgba(255, 255, 100, 0.5);
+        }
+
+        .end {
+            background-color: #22a6b3;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #130f40;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .popup {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .popup button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #22a6b3;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="board-container">
+        <h1>SDG 7: Duurzaam Energie Bordspel</h1>
+        <div class="board">
+            <div class="cell start visible">Start</div>
+            <div class="cell problem">Probleem 1</div>
+            <div class="cell energy">Waterkracht</div>
+            <div class="cell problem">Probleem 2</div>
+            <div class="cell energy">Zonne-energie</div>
+            <div class="cell problem">Probleem 3</div>
+            <div class="cell energy">Windenergie</div>
+            <div class="cell problem">Probleem 4</div>
+            <div class="cell end">Eind</div>
+        </div>
+
+        <button onclick="nextStep()">Volgende stap</button>
+        <p id="message">Klik op de knop om te beginnen!</p>
+    </div>
+
+    <div id="popup" class="popup">
+        <p id="popup-message"></p>
+        <button onclick="closePopup()">Sluiten</button>
+    </div>
+
+    <script>
+        let position = 0;
+        const totalStops = 9;
+        const cells = document.querySelectorAll('.cell');
+        const popup = document.getElementById('popup');
+        const popupMessage = document.getElementById('popup-message');
+        const message = document.getElementById('message');
+
+        function nextStep() {
+            if (position < totalStops) {
+                showPopup(position);
+                updateBoard(position);
+                position++;
+            }
+        }
+
+        function updateBoard(pos) {
+            cells.forEach(cell => cell.classList.remove('visible'));
+
+            for (let i = pos; i < pos + 3 && i < cells.length; i++) {
+                cells[i].classList.add('visible');
+            }
+        }
+
+        function showPopup(pos) {
+            switch (pos) {
+                case 0:
+                    popupMessage.innerHTML = "Welkom bij het bordspel! Klik op 'Volgende stap' om te starten.";
+                    break;
+                case 1:
+                    popupMessage.innerHTML = "Probleem 1: Veel energie komt nog van vervuilende bronnen. Wat kan er beter?";
+                    break;
+                case 2:
+                    popupMessage.innerHTML = "Waterkracht: Duurzame energie opgewekt door stromend water!";
+                    break;
+                case 3:
+                    popupMessage.innerHTML = "Probleem 2: Hoe kunnen we energie besparen in huizen?";
+                    break;
+                case 4:
+                    popupMessage.innerHTML = "Zonne-energie: De zon is een geweldige bron van schone energie!";
+                    break;
+                case 5:
+                    popupMessage.innerHTML = "Probleem 3: Fossiele brandstoffen vervuilen de lucht. Wat kunnen we beter doen?";
+                    break;
+                case 6:
+                    popupMessage.innerHTML = "Windenergie: Windmolens vangen de kracht van de wind om stroom op te wekken!";
+                    break;
+                case 7:
+                    popupMessage.innerHTML = "Probleem 4: Hoe kunnen we overstappen naar meer duurzame energiebronnen?";
+                    break;
+                case 8:
+                    popupMessage.innerHTML = "Gefeliciteerd! Je hebt het einde bereikt en bent nu een energie-expert!";
+                    break;
+            }
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            popup.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
