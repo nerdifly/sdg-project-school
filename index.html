@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SDG 7 Bordspel">
+    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_-T7k1ZIidOGrup9SgAN95XolAdnDGpqOtw&s">
     <title>SDG 7 Bordspel</title>
     <style>
         * {
@@ -181,8 +185,7 @@
 
     <div class="game-container">
         <img id="sdg-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_-T7k1ZIidOGrup9SgAN95XolAdnDGpqOtw&s" alt="SDG 7 Logo">
-        <h1>SDG 7: Betaalbare en duurzame energie
-        </h1>
+        <h1>SDG 7: Betaalbare en duurzame energie</h1>
         <div class="board">
             <div class="cell start current" id="cell-0">Start</div>
             <div class="cell problem" id="cell-1">Doel 1</div>
@@ -195,7 +198,7 @@
             <div class="cell end" id="cell-8">Eind</div>
         </div>
 
-        <button onclick="showinfo()()">Toon info</button>
+        <button onclick="showinfo()">Toon info</button>
         <p id="message">Klik op de knop om verder te gaan!</p>
 
         <div id="popup" class="popup">
