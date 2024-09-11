@@ -5,216 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SDG 7 Bordspel</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Comic Sans MS', sans-serif;
-            background-color: #dff9fb;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            background-image: url('https://sdgresources.relx.com/sites/default/files/styles/sus_content_main_image/public/carousel-images/sdg_inspiration_day_background_banner.png?itok=Kpvrak0I');
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            color: #333;
         }
 
-        .board-container {
+        .game-container {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            max-width: 100%;
+            padding: 20px;
+            position: relative;
         }
 
         h1 {
-            color: #130f40;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        #sdg-logo {
+            width: 100px;
+            margin-bottom: 20px;
         }
 
         .board {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto;
+            position: relative;
+            height: 250px;
+            width: 80%;
+            max-width: 600px;
         }
 
         .cell {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             text-align: center;
             color: white;
-            margin: 0 20px;
             opacity: 0;
-            transform: scale(0);
-            transition: all 0.6s ease-in-out;
+            position: absolute;
+            transform: translateY(50px);
+            transition: all 0.8s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .visible {
+        .current {
             opacity: 1;
-            transform: scale(1.1);
+            transform: translateY(0) scale(1.4);
+            z-index: 10;
+        }
+
+        .side {
+            opacity: 0.7;
+            transform: translateY(0) scale(1);
+            z-index: 1;
+        }
+
+        .left {
+            left: -150px;
+            opacity: 0.6;
+        }
+
+        .right {
+            right: -150px;
+            opacity: 0.6;
         }
 
         .start {
-            background-color: #6ab04c;
-            box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
-            animation: bounce 1s ease infinite;
+            background-color: #27ae60;
+            box-shadow: 0 0 15px rgba(39, 174, 96, 0.5);
         }
 
         .problem {
-            background-color: #eb4d4b;
-            box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+            background-color: #e74c3c;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
         }
 
         .energy {
-            background-color: #f9ca24;
-            box-shadow: 0 0 20px rgba(255, 255, 100, 0.5);
+            background-color: #f39c12;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.5);
         }
 
         .end {
-            background-color: #22a6b3;
-            box-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1.1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes bounce {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
-            }
+            background-color: #2980b9;
+            box-shadow: 0 0 15px rgba(41, 128, 185, 0.5);
         }
 
         button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #130f40;
+            margin-top: 40px;
+            padding: 12px 24px;
+            background-color: #34495e;
             border: none;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2c3e50;
         }
 
         .popup {
             display: none;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.85);
             color: white;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            margin-top: 20px;
             padding: 20px;
             border-radius: 15px;
             text-align: center;
             font-size: 18px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.5s ease forwards;
         }
 
         .popup button {
             margin-top: 10px;
             padding: 10px 20px;
-            background-color: #22a6b3;
+            background-color: #1abc9c;
             border: none;
             color: white;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
     </style>
 </head>
 <body>
 
-    <div class="board-container">
-        <h1>SDG 7: Duurzaam Energie Bordspel</h1>
+    <div class="game-container">
+        <img id="sdg-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_-T7k1ZIidOGrup9SgAN95XolAdnDGpqOtw&s" alt="SDG 7 Logo">
+        <h1>SDG 7: Betaalbare en duurzame energie
+        </h1>
         <div class="board">
-            <div class="cell start visible">Start</div>
-            <div class="cell problem">Probleem 1</div>
-            <div class="cell energy">Waterkracht</div>
-            <div class="cell problem">Probleem 2</div>
-            <div class="cell energy">Zonne-energie</div>
-            <div class="cell problem">Probleem 3</div>
-            <div class="cell energy">Windenergie</div>
-            <div class="cell problem">Probleem 4</div>
-            <div class="cell end">Eind</div>
+            <div class="cell start current" id="cell-0">Start</div>
+            <div class="cell problem" id="cell-1">Doel 1</div>
+            <div class="cell energy" id="cell-2">Waterkracht</div>
+            <div class="cell problem" id="cell-3">Doel 2</div>
+            <div class="cell energy" id="cell-4">Zonne-energie</div>
+            <div class="cell problem" id="cell-5">Doel 3</div>
+            <div class="cell energy" id="cell-6">Windenergie</div>
+            <div class="cell problem" id="cell-7">Doel 4</div>
+            <div class="cell end" id="cell-8">Eind</div>
         </div>
 
-        <button onclick="nextStep()">Volgende stap</button>
-        <p id="message">Klik op de knop om te beginnen!</p>
-    </div>
+        <button onclick="showinfo()()">Toon info</button>
+        <p id="message">Klik op de knop om verder te gaan!</p>
 
-    <div id="popup" class="popup">
-        <p id="popup-message"></p>
-        <button onclick="closePopup()">Sluiten</button>
+        <div id="popup" class="popup">
+            <p id="popup-message"></p>
+            <button onclick="closePopup()">Sluiten</button>
+            <button onclick="nextStep()">Volgende</button>
+        </div>
     </div>
 
     <script>
-        let position = 0;
-        const totalStops = 9;
+        let position = 1;
+        const totalSteps = 9;
         const cells = document.querySelectorAll('.cell');
         const popup = document.getElementById('popup');
         const popupMessage = document.getElementById('popup-message');
-        const message = document.getElementById('message');
+        const body = document.body;
 
         function nextStep() {
-            if (position < totalStops) {
-                showPopup(position);
+            if (position < totalSteps) {
+                closePopup()
                 updateBoard(position);
                 position++;
             }
         }
 
-        function updateBoard(pos) {
-            cells.forEach(cell => cell.classList.remove('visible'));
+        function showinfo() {
+            if (position < totalSteps) {
+                showPopup(position);
+            }
+        }
 
-            for (let i = pos; i < pos + 3 && i < cells.length; i++) {
-                cells[i].classList.add('visible');
+        function updateBoard(pos) {
+            // Reset all cells
+            cells.forEach(cell => {
+                cell.classList.remove('current', 'left', 'right', 'side');
+            });
+
+            // Center the current position
+            cells[pos].classList.add('current');
+
+            // Side cells (left and right)
+            if (pos - 1 >= 0) {
+                cells[pos - 1].classList.add('left', 'side');
+            }
+            if (pos + 1 < totalSteps) {
+                cells[pos + 1].classList.add('right', 'side');
+            }
+
+            // Change background for energy steps only
+            switch(pos) {
+                case 2:
+                    body.style.backgroundImage = 'url(https://raw.githubusercontent.com/nerdifly/sdg-project-school/main/Delivery%20-%20Bewerkt.png)';
+                    break;
+                case 4:
+                    body.style.backgroundImage = 'url(https://media.licdn.com/dms/image/D4E12AQGlNI-RmO9qLg/article-cover_image-shrink_720_1280/0/1686848869160?e=2147483647&v=beta&t=gg3R1grJBK4g3CqYY3EM6Rujs01_8qVHww9NYqzZnkE)';
+                    break;
+                case 6:
+                    body.style.backgroundImage = 'url(https://berckmans-energie.be/wp-content/uploads/2024/06/voordelen-windenergie-e1719780339894.webp)';
+                    break;
+                default:
+                    body.style.backgroundImage = 'url(https://sdgresources.relx.com/sites/default/files/styles/sus_content_main_image/public/carousel-images/sdg_inspiration_day_background_banner.png?itok=Kpvrak0I)';
             }
         }
 
         function showPopup(pos) {
-            switch (pos) {
-                case 0:
-                    popupMessage.innerHTML = "Welkom bij het bordspel! Klik op 'Volgende stap' om te starten.";
-                    break;
+            let message = "";
+            switch(pos) {
                 case 1:
-                    popupMessage.innerHTML = "Probleem 1: Veel energie komt nog van vervuilende bronnen. Wat kan er beter?";
+                    message = "Welkom bij het SDG 7 combineerspel! In dit spel leer je over duurzame energiebronnen. En ga je zelf op zoek naar mogelijke oplossingen voor het eind dooel van deze sdg";
                     break;
                 case 2:
-                    popupMessage.innerHTML = "Waterkracht: Duurzame energie opgewekt door stromend water!";
+                    message = "Doel 7.1: Overal toegang tot betaalbare Duurzame / moderne energie!";
                     break;
                 case 3:
-                    popupMessage.innerHTML = "Probleem 2: Hoe kunnen we energie besparen in huizen?";
+                    message = "Waterkracht kan energie opwekken door stromend water te gebruiken.";
                     break;
                 case 4:
-                    popupMessage.innerHTML = "Zonne-energie: De zon is een geweldige bron van schone energie!";
+                    message = "Doel 7.2: De hoeveelheid (percentage) van duurzame energie verhogen in de “globale energiemix”";
                     break;
                 case 5:
-                    popupMessage.innerHTML = "Probleem 3: Fossiele brandstoffen vervuilen de lucht. Wat kunnen we beter doen?";
+                    message = "Zonne-energie maakt gebruik van de zonnestralen om elektriciteit op te wekken.";
                     break;
                 case 6:
-                    popupMessage.innerHTML = "Windenergie: Windmolens vangen de kracht van de wind om stroom op te wekken!";
+                    message = "Doel 7.3: verbetering van de energie-efficiëntie verdubbelen";
                     break;
                 case 7:
-                    popupMessage.innerHTML = "Probleem 4: Hoe kunnen we overstappen naar meer duurzame energiebronnen?";
+                    message = "Windenergie benut de kracht van de wind om turbines aan te drijven.";
                     break;
                 case 8:
-                    popupMessage.innerHTML = "Gefeliciteerd! Je hebt het einde bereikt en bent nu een energie-expert!";
+                    message = "Doel 7.3 (A en B): Tegen 2030 moet de samenwerking tussen landen verbeteren en meer investeren in schone energie, zodat alle landen, vooral de armere, toegang hebben tot veilige en moderne energie.";
+                    break;
+                case 9:
+                    message = "Gefeliciteerd! Je hebt SDG 7 doelen bereikt!";
                     break;
             }
+            popupMessage.innerText = message;
             popup.style.display = 'block';
         }
 
@@ -222,6 +299,5 @@
             popup.style.display = 'none';
         }
     </script>
-
 </body>
 </html>
